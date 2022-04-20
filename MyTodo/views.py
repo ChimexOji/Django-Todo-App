@@ -18,6 +18,17 @@ def add_todo(request):
 
     return render(request, 'MyTodo/partials/todo.html', {'todo': todo})
 
+@require_http_methods(['GET', 'POST'])
+def edit_todo(request, pk):
+    todo = Todo.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        todo.title = request.POST.get('title', '')
+        todo.save()
+
+        return render(request, 'MyTodo/partials/todo.html', {'todo': todo})
+    return render(request, 'MyTodo/partials/edit.html', {'todo': todo})
+
 @require_http_methods(['PUT'])
 def update_todo(request, pk):
     todo = Todo.objects.get(pk=pk)
